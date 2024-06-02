@@ -1,20 +1,20 @@
-name: IPQ60XX
+name: X86-6.6
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: 0 19 * * *
+    - cron: 0 15 * * *
 
 env:
-  REPO_URL: https://github.com/breeze303/openwrt-6.x.git
-  REPO_BRANCH: main
-  CONFIG_FILE: configs/ipq60xx.config
+  REPO_URL: https://github.com/immortalwrt/immortalwrt.git
+  REPO_BRANCH: master
+  CONFIG_FILE: configs/x86-6.6.config
   DIY_SCRIPT: diy-script.sh
   CLASH_KERNEL: amd64
   CACHE_TOOLCHAIN: true
   UPLOAD_BIN_DIR: false
   FIRMWARE_RELEASE: true
-  FIRMWARE_TAG: IPQ60XX
+  FIRMWARE_TAG: X86-6.6
   TZ: Asia/Shanghai
 
 jobs:
@@ -94,7 +94,8 @@ jobs:
         cd $OPENWRT_PATH
         ./scripts/feeds update -a
         ./scripts/feeds install -a
-  
+        git clone https://github.com/sirpdboy/luci-app-lucky.git package/lucky
+
     - name: Load Custom Configuration(加载自定义配置)
       run: |
         [ -e files ] && mv files $OPENWRT_PATH/files
@@ -158,8 +159,8 @@ jobs:
         artifacts: ${{ env.FIRMWARE_PATH }}/*
         body: |
           **This is OpenWrt Firmware for ${{ env.FIRMWARE_TAG }}**
-          ### 📒 固件信息(NOWIFI)
-          - 这是不带WiFi的固件
+          ### 📒 固件信息(X86-64)
+          - 这是x86-64-6.8kernel
           - 💻 这是 ${{ env.FIRMWARE_TAG }} 平台使用的 OpenWrt 固件
           - ⚽ 固件源码: ${{ env.REPO_URL }}
           - 💝 源码分支: ${{ env.REPO_BRANCH }}
